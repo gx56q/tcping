@@ -1,4 +1,5 @@
 import time
+from _socket import gaierror
 from scapy.layers.inet import IP, TCP
 from scapy.sendrecv import sr1
 
@@ -8,27 +9,36 @@ def tcp_ping(target, port, count, timeout, interval):
     received = 0
     times = []
 
-    while True:
-        if count is not None and sent >= count:
-            break
+    try:
+        while True:
+            if count is not None and sent >= count:
+                return sent, received, times
+            packet = IP(dst=target) / TCP(dport=port, flags="S")
+            start_time = time.time()
 
-        packet = IP(dst=target) / TCP(dport=port, flags="S")
-        start_time = time.time()
-        reply = sr1(packet, timeout=timeout, verbose=0)
-        if reply and reply[TCP].flags == "SA":
-            received += 1
-            elapsed = (time.time() - start_time) * 1000
-            times.append(elapsed)
-            print(f"Reply from {target}:{port} time={elapsed:.2f}ms")
+            reply = sr1(packet, timeout=timeout, verbose=0)
+            if reply and reply[TCP].flags == 0x12:
+                received += 1
+                elapsed = (time.time() - start_time) * 1000
+                times.append(elapsed)
+                print(f"Reply from {target}:{port} time={elapsed:.2f}ms")
+            else:
+                print(f"No response from {target}:{port}")
+
+            sent += 1
+
+            if interval:
+                time.sleep(interval)
+
+    except KeyboardInterrupt:
+        print("\n--- Interruption detected. Stopping pinging. ---")
+    except (OSError, gaierror) as e:
+        if e.errno == 8:
+            print(f"Error: {target} is unreachable")
         else:
-            print(f"No response from {target}:{port}")
-
-        sent += 1
-
-        if count is not None and sent < count:
-            time.sleep(interval)
-
-    print_statistics(sent, received, times)
+            print(e)
+    finally:
+        return sent, received, times
 
 
 def print_statistics(sent, received, times):
