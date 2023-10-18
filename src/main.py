@@ -3,7 +3,7 @@ import sys
 import ping
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="A utility for tcp ping")
+    parser = argparse.ArgumentParser(description="Utility for tcp ping")
     parser.add_argument("host", help="Target host to ping")
     parser.add_argument("-p", "--port", type=int, default=80,
                         help="TCP port number")
