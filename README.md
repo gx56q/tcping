@@ -23,66 +23,77 @@ cd tcping
 pip install -r requirements.txt
 ```
 
-Usage
+## Usage
 
-The tcping utility provides a simple command-line interface to check the accessibility of a target host over TCP using the SYN/ACK mechanism. The general format of the command is as follows:
+The tcping utility provides a simple command-line interface to ping a target host over TCP. The general format of the command is as follows:
 
-sh
-Copy code
-python3 tcping.py <host> [options]
-Target Host
-host: The name or IP address of the target host to check.
-Options
+```sh
+python3 src/main.py <host> [options]
+```
+
+### Target Host
+- `host`: The name or IP address of the target host to check.
+
+### Options
 These are the optional arguments to customize the behavior of the tcping utility:
 
--p or --port: TCP port number. Default is 80.
--c or --count: Number of pings to send. If not specified, it continues indefinitely.
--t or --timeout: Time to wait for a response, in seconds. Default is 1 second.
--i or --interval: Interval between pings, in seconds. Default is 1 second.
-Examples
-Basic TCP ping
+| Option                | Description                                                           |
+|-----------------------|-----------------------------------------------------------------------|
+| `-p` or `--port`      | TCP port number. Default is 80.                                       |
+| `-c` or `--count`     | Number of pings to send. If not specified, it continues indefinitely. |
+| `-t` or `--timeout`   | Time to wait for a response, in seconds. Default is 1 second.         |
+| `-i` or `--interval`  | Interval between pings, in seconds. Default is 1 second.              |
 
-To check the accessibility of www.google.com on port 80:
 
-sh
-Copy code
-python3 tcping.py www.google.com
-Specifying Port
+### Examples
 
-To check the accessibility of www.google.com on port 443:
+#### Basic TCP ping
 
-sh
-Copy code
-python3 tcping.py www.google.com -p 443
-Sending Limited Pings
+To check the accessibility of `www.google.com` on port `80`:
 
-To send exactly 5 pings to www.google.com:
+```sh
+python3 src/main.py www.google.com
+```
 
-sh
-Copy code
-python3 tcping.py www.google.com -c 5
-Setting Timeout
+#### Specifying Port
 
-To wait 2 seconds for a response from www.google.com:
+To check the accessibility of `www.google.com` on port `443`:
 
-sh
-Copy code
-python3 tcping.py www.google.com -t 2
-Adjusting Interval
+```sh
+python3 src/main.py www.google.com -p 443
+```
 
-To set an interval of 0.5 seconds between pings to www.google.com:
+#### Sending Limited Pings
 
-sh
-Copy code
-python3 tcping.py www.google.com -i 0.5
-Help
+To send exactly `5` pings to www.google.com:
 
-To get help on the available options, use the -h or --help option. The command format is:
+```sh
+python3 src/main.py www.google.com -c 5
+```
 
-sh
-Copy code
-python3 tcping.py --help
+#### Setting Timeout
 
+To wait `2` seconds for a response from www.google.com:
+
+```sh
+python3 src/main.py www.google.com -t 2
+```
+
+#### Adjusting Interval
+
+To set an interval of `0.5` seconds between pings to www.google.com:
+
+```sh
+python3 src/main.py www.google.com -i 0.5
+```
+
+### Help
+
+To get help on the available options, use the `-h` or `--help` option. The command format is:
+
+```sh
+python3 src/main.py --help
+```
 
 ## Author
 
