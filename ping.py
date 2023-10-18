@@ -8,14 +8,12 @@ def tcp_ping(target, port, count, timeout, interval):
     sent = 0
     received = 0
     times = []
-
     try:
         while True:
             if count is not None and sent >= count:
                 return sent, received, times
             packet = IP(dst=target) / TCP(dport=port, flags="S")
             start_time = time.time()
-
             reply = sr1(packet, timeout=timeout, verbose=0)
             if reply and reply[TCP].flags == 0x12:
                 received += 1
@@ -24,12 +22,9 @@ def tcp_ping(target, port, count, timeout, interval):
                 print(f"Reply from {target}:{port} time={elapsed:.2f}ms")
             else:
                 print(f"No response from {target}:{port}")
-
             sent += 1
-
             if interval:
                 time.sleep(interval)
-
     except KeyboardInterrupt:
         print("\n--- Interruption detected. Stopping pinging. ---")
     except (OSError, gaierror) as e:

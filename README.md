@@ -28,7 +28,7 @@ pip install -r requirements.txt
 The tcping utility provides a simple command-line interface to ping a target host over TCP. The general format of the command is as follows:
 
 ```sh
-python3 src/main.py <host> [options]
+python3 main.py <host> [options]
 ```
 
 ### Target Host
@@ -52,7 +52,7 @@ These are the optional arguments to customize the behavior of the tcping utility
 To check the accessibility of `www.google.com` on port `80`:
 
 ```sh
-python3 src/main.py www.google.com
+python3 main.py www.google.com
 ```
 
 #### Specifying Port
@@ -60,7 +60,7 @@ python3 src/main.py www.google.com
 To check the accessibility of `www.google.com` on port `443`:
 
 ```sh
-python3 src/main.py www.google.com -p 443
+python3 main.py www.google.com -p 443
 ```
 
 #### Sending Limited Pings
@@ -68,7 +68,7 @@ python3 src/main.py www.google.com -p 443
 To send exactly `5` pings to www.google.com:
 
 ```sh
-python3 src/main.py www.google.com -c 5
+python3 main.py www.google.com -c 5
 ```
 
 #### Setting Timeout
@@ -76,7 +76,7 @@ python3 src/main.py www.google.com -c 5
 To wait `2` seconds for a response from www.google.com:
 
 ```sh
-python3 src/main.py www.google.com -t 2
+python3 main.py www.google.com -t 2
 ```
 
 #### Adjusting Interval
@@ -84,7 +84,7 @@ python3 src/main.py www.google.com -t 2
 To set an interval of `0.5` seconds between pings to www.google.com:
 
 ```sh
-python3 src/main.py www.google.com -i 0.5
+python3 main.py www.google.com -i 0.5
 ```
 
 ### Help
@@ -92,7 +92,7 @@ python3 src/main.py www.google.com -i 0.5
 To get help on the available options, use the `-h` or `--help` option. The command format is:
 
 ```sh
-python3 src/main.py --help
+python3 main.py --help
 ```
 
 ## Author

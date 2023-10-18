@@ -2,7 +2,8 @@ import argparse
 import sys
 import ping
 
-if __name__ == '__main__':
+
+def parse_args():
     parser = argparse.ArgumentParser(description="Utility for tcp ping")
     parser.add_argument("host", help="Target host to ping")
     parser.add_argument("-p", "--port", type=int, default=80,
@@ -13,21 +14,23 @@ if __name__ == '__main__':
                         help="Time to wait for a response, in seconds")
     parser.add_argument("-i", "--interval", type=float, default=1,
                         help="Interval between pings, in seconds")
+    return parser.parse_args()
 
-    args = parser.parse_args()
 
+def main():
+    args = parse_args()
     if args.count is not None and args.count <= 0:
-        print("Error: count should be greater than 0")
-        sys.exit(1)
+        sys.exit("Error: count should be greater than 0")
     if args.timeout <= 0:
-        print("Error: timeout should be greater than 0")
-        sys.exit(1)
+        sys.exit("Error: timeout should be greater than 0")
     if args.interval <= 0:
-        print("Error: interval should be greater than 0")
-        sys.exit(1)
-
+        sys.exit("Error: interval should be greater than 0")
     sent, received, times = ping.tcp_ping(args.host, args.port, args.count,
                                           args.timeout, args.interval)
     if sent:
-        ping.print_statistics(
-            sent, received, times)
+        ping.print_statistics(sent, received, times)
+
+
+if __name__ == '__main__':
+    print("\033c")
+    main()
