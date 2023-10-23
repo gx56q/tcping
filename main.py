@@ -1,5 +1,6 @@
 import argparse
 import ipaddress
+import socket
 import sys
 
 import ping
@@ -20,13 +21,26 @@ def parse_args():
 
 
 def validate_host(host):
+    if not host:
+        sys.exit(f"Error: Host is empty.")
     try:
-        if ipaddress.ip_address(host).version == 6:
+        ip_version = ipaddress.ip_address(host).version
+        if ip_version == 6:
             return host, 'ipv6'
         else:
             return host, 'ipv4'
     except ValueError:
-        sys.exit(f"Error: {host} is not a valid IPv4 or IPv6 address")
+        try:
+            resolved_ip = socket.gethostbyname(host)
+            ip_version = ipaddress.ip_address(resolved_ip).version
+            if ip_version == 6:
+                return host, 'ipv6'
+            else:
+                return host, 'ipv4'
+        except socket.gaierror:
+            sys.exit(
+                f"Error: Unable to resolve {host}."
+                f" It's not a valid domain name or IP address.")
 
 
 def validate_port(port_str):

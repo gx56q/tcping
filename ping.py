@@ -10,12 +10,17 @@ def tcp_ping(target, port, count, timeout, interval, host_type='ipv4'):
     received = 0
     times = []
 
-    if host_type == 'ipv6':
-        ip_layer = IPv6(dst=target)
-        display_target = f"[{target}]"
-    else:
-        ip_layer = IP(dst=target)
-        display_target = target
+    try:
+        if host_type == 'ipv6':
+            ip_layer = IPv6(dst=target)
+            display_target = f"[{target}]"
+        else:
+            ip_layer = IP(dst=target)
+            display_target = target
+    except (OSError, gaierror) as e:
+        if e.errno == 8:
+            print(f"Error: {target} is unreachable")
+            return sent, received, times
 
     try:
         while True:
@@ -42,7 +47,7 @@ def tcp_ping(target, port, count, timeout, interval, host_type='ipv4'):
         if e.errno == 8:
             print(f"Error: {target} is unreachable")
         else:
-            print(e)
+            print(str(e))
     finally:
         return sent, received, times
 
