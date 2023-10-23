@@ -2,26 +2,37 @@ import time
 from _socket import gaierror
 from scapy.layers.inet import IP, TCP
 from scapy.sendrecv import sr1
+from scapy.layers.inet6 import IPv6
 
 
-def tcp_ping(target, port, count, timeout, interval):
+def tcp_ping(target, port, count, timeout, interval, host_type='ipv4'):
     sent = 0
     received = 0
     times = []
+
+    if host_type == 'ipv6':
+        ip_layer = IPv6(dst=target)
+        display_target = f"[{target}]"
+    else:
+        ip_layer = IP(dst=target)
+        display_target = target
+
     try:
         while True:
             if count is not None and sent >= count:
                 return sent, received, times
-            packet = IP(dst=target) / TCP(dport=port, flags="S")
+            packet = ip_layer / TCP(dport=port, flags="S")
             start_time = time.time()
             reply = sr1(packet, timeout=timeout, verbose=0)
             if reply and reply[TCP].flags == 0x12:
                 received += 1
                 elapsed = (time.time() - start_time) * 1000
                 times.append(elapsed)
-                print(f"Reply from {target}:{port} time={elapsed:.2f}ms")
+                print(
+                    f"Reply from {display_target}:{port} time={elapsed:.2f}ms")
             else:
-                print(f"No response from {target}:{port}")
+                print(
+                    f"No response from {display_target}:{port}")
             sent += 1
             if interval:
                 time.sleep(interval)
